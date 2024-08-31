@@ -1,0 +1,98 @@
+import pandas as pd
+df=pd.read_csv(r"twitter_training.csv")
+df.head()
+df1=pd.read_csv(r"twitter_validation.csv")
+df1.head()
+from nltk.tokenize import sent_tokenize,word_tokenize
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.datasets import fetch_20newsgroups
+from nltk.corpus import stopwords
+import string
+from nltk import pos_tag
+from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
+import seaborn as sns
+import matplotlib.pyplot as plt
+%matplotlib inline
+import nltk
+nltk.download('stopwords')
+df.columns=['id','game','sentiment','text']
+df1.columns=['id','game','sentiment','text']
+df
+df1
+df.shape
+df.columns
+df.describe(include='all')
+id_types=df['id'].value_counts()
+id_types
+plt.figure(figsize=(12,7))
+sns.barplot(y=id_types.index,x=id_types.values)
+plt.xlabel("type")
+plt.ylabel("count")
+plt.title("id vs count")
+plt.show()
+game_types=df['game'].value_counts()
+game_types
+plt.figure(figsize=(14,10))
+sns.barplot(x=game_types.values,y=game_types.index)
+plt.title("games and count")
+plt.xlabel("count")
+plt.ylabel("type")
+plt.show()
+sns.heatmap(df.isnull(),yticklabels=False,cmap='viridis')
+total_null=df.isnull().sum().sort_values(ascending=False)
+percent=((df.isnull().sum()/df.isnull().count())*100).sort_values(ascending=False)
+print("Total records=",df.shape[0])
+missing_data=pd.concat([total_null,percent.round(2)],axis=1,keys=["Total Missing","In Percent"])
+missing_data.head(10)
+df.dropna(subset=["text"],inplace=True)
+totat_null=df.isnull().sum().sort_values(ascending=False)
+percent=((df.isnull().sum()/df.isnull().count())*100).sort_values(ascending=False)
+missing_data=pd.concat([total_null,percent.round(2)],axis=1,keys=["Total Missing","In Percent"])
+missing_data.head(10)
+train0=df[df['sentiment']=="Negative"]
+train1=df[df['sentiment']=="Positive"]
+train2=df[df['sentiment']=="Irrelavant"]
+train3=df[df['sentiment']=="Neutral"]
+train0.shape,train1.shape,train2.shape,train3.shape
+train0=train0[:int(train0.shape[0]/12)]
+train1=train1[:int(train1.shape[0]/12)]
+train2=train2[:int(train2.shape[0]/12)]
+train3=train3[:int(train3.shape[0]/12)]
+train0.shape,train1.shape,train2.shape,train3.shape
+df=pd.concat([train0,train1,train2,train3],axis=0)
+df
+id_types=df['id'].value_counts()
+id_types
+plt.figure(figsize=(12,7))
+sns.barplot(x=id_types.values,y=id_types.index)
+plt.xlabel("type")
+plt.ylabel("count")
+plt.title("tv shows vs movies")
+plt.show()
+game_types=df['game'].value_counts()
+game_types
+plt.figure(figsize=(12,7))
+sns.barplot(x=game_types.values,y=game_types.index)
+plt.xlabel("type")
+plt.ylabel("count")
+plt.show()
+sentiment_types=df['sentiment'].value_counts()
+sentiment_types
+from sklearn import preprocessing
+label_encoder=preprocessing.LabelEncoder()
+df['sentiment']=label_encoder.fit_transform(df['sentiment'])
+df['game']=label_encoder.fit_transform(df['game'])
+df1['sentiment']=label_encoder.fit_transform(df1['sentiment'])
+df1['game']=label_encoder.fit_transform(df1['game'])
+df=df.drop(['id'],axis=1)
+df
+df.nunique()
+df1.nunique()
