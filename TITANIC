@@ -1,0 +1,47 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+df=pd.read_csv("Titanic-Dataset.csv")
+df.head()
+df.tail()
+df.shape
+df['Age']
+df['Survived'].value_counts()
+df['Survived'].value_counts().keys()
+plt.figure(figsize=(5,5))
+plt.bar(list(df['Survived'].value_counts().keys()),list(df['Survived'].value_counts()),color=['b','y'])
+plt.show()
+df['Pclass'].value_counts()
+plt.figure(figsize=(5,5))
+plt.bar(list(df['Pclass'].value_counts().keys()),list(df['Pclass'].value_counts()),color=["red","blue","orange"])
+plt.show()
+df["Sex"].value_counts()
+plt.figure(figsize=(5,5))
+plt.bar(list(df['Sex'].value_counts().keys()),list(df['Sex'].value_counts()),color=['red','green'])
+plt.show()
+df.isna().sum()
+df.replace({'Sex':{'male':0,'female':1}},inplace=True)
+df.head()
+x=df[['Pclass','Sex']]
+y=df['Survived']
+x,y
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+print(x.shape,x_train.shape,x_test.shape)
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+print(y.shape,y_train.shape,y_test.shape)
+from sklearn.linear_model import LogisticRegression
+a=LogisticRegression()
+a.fit(x_train,y_train)
+x_test_prediction=a.predict(x_test)
+print(x_test_prediction)
+print(y_test)
+x_train_prediction=a.predict(x_train)
+print(x_train_prediction)
+print(y_train)
+from sklearn.metrics import accuracy_score
+train_accuracy=accuracy_score(x_train_prediction,y_train)
+test_accuracy=accuracy_score(x_test_prediction,y_test)
+print("accuracy score:",train_accuracy,"and",test_accuracy)
