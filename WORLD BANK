@@ -1,0 +1,43 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df=pd.read_csv("world_population.csv")
+df
+df.head()
+df.tail()
+df.shape
+df.columns
+df.isnull().sum()
+duplicates = df.duplicated().sum()
+duplicates
+df.describe()
+df.info()
+cat_col = []
+num_col = []
+for col in df:
+    if df[col].dtype == object:
+        cat_col.append(col)
+    else:
+        num_col.append(col)
+cat_col
+num_col
+years = ['1970 Population', '1980 Population', '1990 Population', '2000 Population', '2010 Population', '2015 Population', '2020 Population', '2022 Population']
+fig, axes = plt.subplots(nrows=4, ncols=2, figsize=(14, 16))
+axes = axes.flatten()
+
+for i, year in enumerate(years):
+    axes[i].bar(df['Country/Territory'].head(10), df[year].head(10), color='skyblue')
+    axes[i].set_title(f'Population in {year}')
+    axes[i].tick_params(axis='x', rotation=90)
+
+plt.tight_layout()
+plt.show()
+df.columns
+df["Country/Territory"].unique()
+plt.figure(figsize=(10, 6))
+sns.histplot(df['Growth Rate'], kde=True, bins=30)
+plt.title('Distribution of Population Growth Rate')
+plt.xlabel('Growth Rate')
+plt.ylabel('Frequency')
+plt.show()
+df['Growth Rate'].describe()
